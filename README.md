@@ -1,5 +1,6 @@
 # Sqiddler
-Use [Sqids](https://sqids.org/dotnet) in ASP.NET Core with attributes
+
+Sqiddler applies [Sqids](https://sqids.org/dotnet) to serialize integer ids to obfuscated strings. It uses ASP.NET Core's built-in JSON serialization and model binding features to automatically convert between integers and Sqid-strings. It also shuffles the alphabet by entity to make it harder to mix ids.
 
 ## Getting Started
 
@@ -89,3 +90,6 @@ var app = builder.Build();
 app.MapOpenApi();
 app.Run();
 ```
+
+## How it works
+
