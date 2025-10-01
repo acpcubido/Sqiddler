@@ -1,6 +1,6 @@
 <Solution>
-  <Project Path="src/Sqiddler.AspNetCore/Sqiddler.AspNetCore.csproj" />
+  <Project Path="src/Sqiddler.Core/Sqiddler.Core.csproj" />
+  <Project Path="src/Sqiddler/Sqiddler.csproj" />
   <Project Path="src/Sqiddler.NSwag/Sqiddler.NSwag.csproj" />
   <Project Path="src/Sqiddler.OpenApi/Sqiddler.OpenApi.csproj" />
-  <Project Path="src/Sqiddler/Sqiddler.csproj" />
 </Solution>

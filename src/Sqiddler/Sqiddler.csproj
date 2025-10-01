@@ -10,4 +10,8 @@
     <PackageReference Include="Sqids" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sqiddler.Core\Sqiddler.Core.csproj" />
+  </ItemGroup>
+
 </Project>

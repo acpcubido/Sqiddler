@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sqiddler.AspNetCore\Sqiddler.AspNetCore.csproj" />
+    <ProjectReference Include="..\Sqiddler\Sqiddler.csproj" />
   </ItemGroup>
 
 </Project>
