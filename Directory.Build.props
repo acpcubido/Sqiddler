@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' != 'Debug' ">
+    <NoWarn>IDE0005</NoWarn>
+  </PropertyGroup>
+</Project>

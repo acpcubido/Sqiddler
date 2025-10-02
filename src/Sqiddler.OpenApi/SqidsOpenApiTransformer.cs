@@ -46,7 +46,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             {
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
-                    var schema = (OpenApiSchema)operation.Parameters[i].Schema!;
+                    var schema = operation.Parameters[i].Schema!;
                     schema.Format = "string";
                     //schema.Items = null;
                 }
