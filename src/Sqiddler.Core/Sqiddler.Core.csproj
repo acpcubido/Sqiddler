@@ -2,12 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	
+	<!-- NuGet -->
+	<PackageId>Sqiddler.Core</PackageId>
+	<Authors>mhartmair-cubido</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+	<Description>Use Sqids in ASP.NET Core with Attributes</Description>
+	<PackageTags>Sqids</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Sqids" Version="3.1.0" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

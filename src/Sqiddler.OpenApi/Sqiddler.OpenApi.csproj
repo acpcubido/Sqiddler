@@ -2,8 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>net9.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	
+	<!-- NuGet -->
+	<PackageId>Sqiddler.OpenApi</PackageId>
+	<Authors>mhartmair-cubido</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+	<Description>Use Sqids in ASP.NET Core with Attributes</Description>
+	<PackageTags>Sqids</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +18,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sqiddler\Sqiddler.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
