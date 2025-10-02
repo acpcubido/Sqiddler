@@ -9,7 +9,7 @@
 	  <!-- NuGet -->
 	  <Company>acpcubido</Company>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
 
     <!-- Enable debugging and diagnostics with Source Link -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
