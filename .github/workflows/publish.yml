@@ -21,8 +21,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build -c Release --no-restore
-    - name: publish nuget
-      run: dotnet pack -c Release --no-build
-    - name: publish nuget
-      run: dotnet nuget push '**/*.*nupkg' --source https://api.nuget.org/v3/index.json
+    - name: Pack
+      run: dotnet pack -c Release --no-build -o packages
+    - name: Publish NuGet
+      run: dotnet nuget push 'packages/*.*nupkg' --source https://api.nuget.org/v3/index.json
       
