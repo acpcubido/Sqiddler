@@ -4,10 +4,10 @@ Sqiddler applies [Sqids](https://sqids.org/dotnet) to serialize integer ids to o
 
 ## Getting Started
 
-Install NuGet package `Sqiddler.AspNetCore`
+Install NuGet package `Sqiddler`
 
 ```bash
-dotnet add package Sqiddler.AspNetCore
+dotnet add package Sqiddler
 ```
 
 Annotate your id properties with `[JsonSqid<TEntity>]` and id route parameters with `SqidParam<TEntity>` to serialize them to Sqid-strings.
@@ -72,7 +72,7 @@ Configure `Sqids.SqidsOptions` in `appsettings.json`
 
 ## Open API
 
-Install NuGet package `Sqiddler.OpenApi`
+Install NuGet package `Sqiddler.OpenApi` instead of `Sqiddler`
 
 ```bash
 dotnet add package Sqiddler.OpenApi
@@ -90,6 +90,3 @@ var app = builder.Build();
 app.MapOpenApi();
 app.Run();
 ```
-
-## How it works
-
