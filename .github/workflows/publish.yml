@@ -24,5 +24,7 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release --no-build -o packages
     - name: Publish NuGet
-      run: dotnet nuget push './packages/*.*nupkg' --source https://api.nuget.org/v3/index.json
-      
+      run: |
+        for file in packages/*.nupkg; do
+          dotnet nuget push "$file" --source https://api.nuget.org/v3/index.json
+        done
