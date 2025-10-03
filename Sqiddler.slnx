@@ -7,4 +7,5 @@
   <Project Path="src/Sqiddler.NSwag/Sqiddler.NSwag.csproj" />
   <Project Path="src/Sqiddler.OpenApi/Sqiddler.OpenApi.csproj" />
   <Project Path="src/Sqiddler/Sqiddler.csproj" />
+  <Project Path="tests/Sqiddler.Tests/Sqiddler.Tests.csproj" Id="b66995bd-a3da-43f8-b9f4-aa46fe47393a" />
 </Solution>
