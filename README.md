@@ -1,5 +1,9 @@
 # Sqiddler
 
+[![Nuget](https://img.shields.io/nuget/v/Sqiddler?style=flat-square)](https://www.nuget.org/packages/Sqiddler/)
+[![License](https://img.shields.io/github/license/acpcubido/Sqiddler?style=flat-square)](https://github.com/acpcubido/Sqiddler/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/badge/-source-181717.svg?logo=GitHub)](https://github.com/acpcubido/Sqiddler)
+
 Sqiddler applies [Sqids](https://sqids.org/dotnet) to serialize integer ids to obfuscated strings. It uses ASP.NET Core's built-in JSON serialization and model binding features to automatically convert between integers and Sqid-strings. It also shuffles the alphabet by entity to make it harder to mix ids.
 
 ## Getting Started
