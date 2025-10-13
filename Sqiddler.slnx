@@ -1,7 +1,11 @@
 <Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/GettingStarted/GettingStarted.csproj" Id="da7e9eca-ee41-4cf5-ae3c-0e85c704d0cc" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
+    <File Path="README.md" />
   </Folder>
   <Project Path="src/Sqiddler.Core/Sqiddler.Core.csproj" />
   <Project Path="src/Sqiddler.NSwag/Sqiddler.NSwag.csproj" />

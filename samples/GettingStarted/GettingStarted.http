@@ -1,0 +1,16 @@
+@GettingStarted_HostAddress = http://localhost:5106
+
+GET {{GettingStarted_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{GettingStarted_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{GettingStarted_HostAddress}}/weatherforecast/jU4nCv
+Accept: application/json
+
+###
