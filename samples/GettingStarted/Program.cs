@@ -44,6 +44,23 @@ app.MapGet("/weatherforecast/{id}", (SqidParam<WeatherForecast> id) =>
     return forecast;
 })
 .WithName("GetWeatherForecastDay");
+app.MapGet("/weatherforecast/multiple/{ids}", (SqidArrayParam<WeatherForecast> ids) =>
+{
+    var forecasts = ids.Value.Select(GetWeatherForecast).ToArray();
+    return forecasts;
+})
+.WithName("GetWeatherForecastMultiple");
+app.MapGet("/weatherforecast/batch", () =>
+{
+    var ids = new[] { 1, 2, 3 };
+    var batch = new WeatherForecastBatch
+    {
+        Ids = ids,
+        Forecasts = ids.Select(GetWeatherForecast).ToArray()
+    };
+    return batch;
+})
+.WithName("GetWeatherForecastBatch");
 
 app.Run();
 
@@ -59,4 +76,12 @@ internal class WeatherForecast()
     public string? Summary { get; set; }
 
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+internal class WeatherForecastBatch()
+{
+    [JsonSqid<WeatherForecastBatch>]
+    public required int[] Ids { get; set; }
+
+    public required WeatherForecast[] Forecasts { get; set; }
 }

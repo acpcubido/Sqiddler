@@ -119,6 +119,75 @@ public class JsonSqidAttributeTests
     }
 
     [Fact]
+    public void Should_Serialize_Empty_Int32Array()
+    {
+        // Arrange
+        int[] id = [];
+        var encoder = SqidsEncoderFactory.Create<SqidModelInt32Array, int>();
+        var expected = JsonSerializer.Serialize(new ModelString
+        {
+            Id = encoder.Encode(id)
+        });
+
+        // Act
+        var actual = JsonSerializer.Serialize(new SqidModelInt32Array { Id = id });
+
+        // Assert
+        Console.WriteLine(actual);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Should_Deserialize_Empty_Int32Array()
+    {
+        // Arrange
+        var expected = new SqidModelInt32Array { Id = [] };
+        var json = JsonSerializer.Serialize(expected);
+
+        // Act
+        var actual = JsonSerializer.Deserialize<SqidModelInt32Array>(json);
+
+        // Assert
+        Assert.NotNull(actual);
+        Assert.Empty(actual.Id);
+    }
+
+    [Fact]
+    public void Should_Serialize_Single_Element_Int32Array()
+    {
+        // Arrange
+        int[] id = [42];
+        var encoder = SqidsEncoderFactory.Create<SqidModelInt32Array, int>();
+        var expected = JsonSerializer.Serialize(new ModelString
+        {
+            Id = encoder.Encode(id)
+        });
+
+        // Act
+        var actual = JsonSerializer.Serialize(new SqidModelInt32Array { Id = id });
+
+        // Assert
+        Console.WriteLine(actual);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Should_Deserialize_Single_Element_Int32Array()
+    {
+        // Arrange
+        var expected = new SqidModelInt32Array { Id = [42] };
+        var json = JsonSerializer.Serialize(expected);
+
+        // Act
+        var actual = JsonSerializer.Deserialize<SqidModelInt32Array>(json);
+
+        // Assert
+        Assert.NotNull(actual);
+        Assert.Single(actual.Id);
+        Assert.Equal(42, actual.Id[0]);
+    }
+
+    [Fact]
     public void Should_Serialize_With_Different_Seeds()
     {
         // Arrange
