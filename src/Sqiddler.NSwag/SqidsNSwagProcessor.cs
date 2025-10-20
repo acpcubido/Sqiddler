@@ -53,14 +53,8 @@ public class SqidsNSwagProcessor : ISchemaProcessor, IOperationProcessor, IDocum
         foreach (var parameterInfo in sqidParameters)
         {
             var parameter = context.OperationDescription.Operation.Parameters.First(p => p.Name == parameterInfo.Name);
-            if (parameterInfo.ParameterType.IsArray)
-            {
-                parameter.Schema = context.SchemaGenerator.Generate(typeof(string[]), context.SchemaResolver);
-            }
-            else
-            {
-                parameter.Schema = context.SchemaGenerator.Generate(typeof(string), context.SchemaResolver);
-            }
+            // Both SqidParam and SqidArrayParam should be represented as string in OpenAPI
+            parameter.Schema = context.SchemaGenerator.Generate(typeof(string), context.SchemaResolver);
         }
 
         var sqidProperties = context.MethodInfo.GetParameters()
@@ -98,6 +92,10 @@ public class SqidsNSwagProcessor : ISchemaProcessor, IOperationProcessor, IDocum
         {
             return IsSqidParam(type.GetElementType()!);
         }
-        return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(SqidParam<,>) || type.GetGenericTypeDefinition() == typeof(SqidParam<>));
+        return type.IsGenericType && (
+            type.GetGenericTypeDefinition() == typeof(SqidParam<,>) || 
+            type.GetGenericTypeDefinition() == typeof(SqidParam<>) ||
+            type.GetGenericTypeDefinition() == typeof(SqidArrayParam<,>) || 
+            type.GetGenericTypeDefinition() == typeof(SqidArrayParam<>));
     }
 }

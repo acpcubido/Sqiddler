@@ -17,8 +17,7 @@ public class SqidsJsonConverter<TSeed> : JsonConverterFactory
         if (typeToConvert.IsArray)
         {
             var elementType = typeToConvert.GetElementType()!;
-            var baseConverter = SqidJsonConverter.Create<TSeed>(elementType);
-            return ArrayJsonConverter.Create(elementType, baseConverter);
+            return ArrayJsonConverter.Create<TSeed>(elementType);
         }
         if (Nullable.GetUnderlyingType(typeToConvert) is { } underlyingType)
         {

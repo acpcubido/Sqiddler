@@ -1,33 +1,33 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Sqids;
 
 namespace Sqiddler;
 
 public static class ArrayJsonConverter
 {
-    public static JsonConverter Create(Type elementType, JsonConverter baseConverter)
+    public static JsonConverter Create<TSeed>(Type elementType)
     {
-        return (JsonConverter)Activator.CreateInstance(typeof(ArrayJsonConverter<>).MakeGenericType(elementType), [baseConverter])!;
+        return (JsonConverter)Activator.CreateInstance(typeof(ArrayJsonConverter<,>).MakeGenericType(typeof(TSeed), elementType))!;
     }
 }
-public class ArrayJsonConverter<T>(JsonConverter<T> baseConverter) : JsonConverter<T[]> where T :  unmanaged
+public class ArrayJsonConverter<TSeed, T> : JsonConverter<T[]> where T : unmanaged, System.Numerics.IBinaryInteger<T>, System.Numerics.IMinMaxValue<T>
 {
+    private readonly SqidsEncoder<T> sqids = SqidsEncoderFactory.Create<TSeed, T>();
+
     public override T[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
             return null;
         }
-        if (reader.TokenType != JsonTokenType.StartArray)
+        if (reader.TokenType != JsonTokenType.String)
         {
             throw new JsonException();
         }
-        var result = new List<T>();
-        while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-        {
-            result.Add(baseConverter.Read(ref reader, typeToConvert, options));
-        }
-        return [.. result];
+        var id = reader.GetString();
+        var decoded = sqids.Decode(id);
+        return decoded.ToArray();
     }
 
     public override void Write(Utf8JsonWriter writer, T[]? value, JsonSerializerOptions options)
@@ -38,12 +38,8 @@ public class ArrayJsonConverter<T>(JsonConverter<T> baseConverter) : JsonConvert
         }
         else
         {
-            writer.WriteStartArray();
-            foreach (var item in value)
-            {
-                baseConverter.Write(writer, item, options);
-            }
-            writer.WriteEndArray();
+            var id = sqids.Encode(value);
+            writer.WriteStringValue(id);
         }
     }
 }

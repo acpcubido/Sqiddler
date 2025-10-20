@@ -29,8 +29,9 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
     {
         if (context.JsonPropertyInfo != null && IsSqid(context.JsonPropertyInfo))
         {
+            schema.Type = "string";
             schema.Format = "string";
-            // TODO: arrays
+            schema.Items = null;
         }
         return Task.CompletedTask;
     }
@@ -83,6 +84,10 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
         {
             return IsSqidParam(type.GetElementType()!);
         }
-        return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(SqidParam<,>) || type.GetGenericTypeDefinition() == typeof(SqidParam<>));
+        return type.IsGenericType && (
+            type.GetGenericTypeDefinition() == typeof(SqidParam<,>) || 
+            type.GetGenericTypeDefinition() == typeof(SqidParam<>) ||
+            type.GetGenericTypeDefinition() == typeof(SqidArrayParam<,>) || 
+            type.GetGenericTypeDefinition() == typeof(SqidArrayParam<>));
     }
 }

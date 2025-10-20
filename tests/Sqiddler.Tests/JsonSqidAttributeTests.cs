@@ -90,9 +90,9 @@ public class JsonSqidAttributeTests
         // Arrange
         int[] id = [12345, 23456, 34567];
         var encoder = SqidsEncoderFactory.Create<SqidModelInt32Array, int>();
-        var expected = JsonSerializer.Serialize(new ModelStringArray
+        var expected = JsonSerializer.Serialize(new ModelString
         {
-            Id = [.. id.Select(encoder.Encode)]
+            Id = encoder.Encode(id)
         });
 
         // Act
