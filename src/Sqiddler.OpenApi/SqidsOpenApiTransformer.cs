@@ -29,8 +29,23 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
     {
         if (context.JsonPropertyInfo != null && IsSqid(context.JsonPropertyInfo))
         {
-            schema.Format = "string";
-            // TODO: arrays
+            var propertyType = context.JsonPropertyInfo.PropertyType;
+            
+            if (propertyType.IsArray)
+            {
+                // For array properties, set the items to string type
+                if (schema.Items != null)
+                {
+                    schema.Items.Type = "string";
+                    schema.Items.Format = null;
+                }
+            }
+            else
+            {
+                // For non-array properties, set the schema to string type
+                schema.Type = "string";
+                schema.Format = null;
+            }
         }
         return Task.CompletedTask;
     }
@@ -46,9 +61,24 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             {
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
+                    var parameterType = context.Description.ParameterDescriptions[i].Type;
                     var schema = operation.Parameters[i].Schema!;
-                    schema.Format = "string";
-                    //schema.Items = null;
+                    
+                    if (parameterType.IsArray)
+                    {
+                        // For array parameters, set the items to string type
+                        if (schema.Items != null)
+                        {
+                            schema.Items.Type = "string";
+                            schema.Items.Format = null;
+                        }
+                    }
+                    else
+                    {
+                        // For non-array parameters, set the schema to string type
+                        schema.Type = "string";
+                        schema.Format = null;
+                    }
                 }
 
                 //    var sqidProperties = context.MethodInfo.GetParameters()

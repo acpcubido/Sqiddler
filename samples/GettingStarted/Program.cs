@@ -45,6 +45,13 @@ app.MapGet("/weatherforecast/{id}", (SqidParam<WeatherForecast> id) =>
 })
 .WithName("GetWeatherForecastDay");
 
+app.MapGet("/weatherforecast/bulk", (SqidParam<WeatherForecast>[] ids) =>
+{
+    var forecasts = ids.Select(id => GetWeatherForecast((int)id)).ToArray();
+    return forecasts;
+})
+.WithName("GetWeatherForecastBulk");
+
 app.Run();
 
 internal class WeatherForecast()
