@@ -30,7 +30,6 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
         if (context.JsonPropertyInfo != null && IsSqid(context.JsonPropertyInfo))
         {
             var propertyType = context.JsonPropertyInfo.PropertyType;
-            
             if (propertyType.IsArray)
             {
                 // For array properties, set the items to string type
@@ -39,14 +38,13 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
                     // { "type": "integer", "format": "int32" } => { "type": "string" }
                     schema.Items.Type = "string";
                     schema.Items.Format = null;
-                    schema.Items.Properties?.Clear();
                 }
-            }
-            else
-            {
+                else
+                {
                     // { "type": "integer", "format": "int32" } => { "type": "string" }
-                schema.Type = "string";
-                schema.Format = null;
+                    schema.Type = "string";
+                    schema.Format = null;
+                }
             }
         }
         return Task.CompletedTask;
@@ -64,7 +62,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
                     var parameterType = context.Description.ParameterDescriptions[i].Type;
-                    
+
                     if (parameterType.IsArray)
                     {
                         // For array parameters, replace with a string array schema
