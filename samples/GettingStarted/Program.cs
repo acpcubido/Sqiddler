@@ -38,14 +38,20 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
-app.MapGet("/weatherforecast/{id}", (SqidParam<WeatherForecast> id) =>
+app.MapGet("/weatherforecast/{id}", (
+    // Demonstrates usage of SqidParam attribute usage on plain integer request parameters
+    SqidParam<WeatherForecast> id) =>
 {
     var forecast = GetWeatherForecast(id);
     return forecast;
 })
 .WithName("GetWeatherForecastDay");
 
-app.MapGet("/weatherforecast/bulk", (SqidParam<WeatherForecast>[] ids) =>
+app.MapGet("/weatherforecast/bulk", (
+    // Demonstrates usage of SqidParam attribute usage on query params
+    SqidParam<WeatherForecast>[] ids,
+    // Use this property to compare with Open API JSON output of ids
+    string[] ids1) =>
 {
     var forecasts = ids.Select(id => GetWeatherForecast((int)id)).ToArray();
     return forecasts;
@@ -56,8 +62,23 @@ app.Run();
 
 internal class WeatherForecast()
 {
+    /// <summary>
+    /// Demonstrates usage of JsonSqid attribute usage on plain integer properties
+    /// </summary>
     [JsonSqid<WeatherForecast>]
     public int Id { get; set; }
+
+    /// <summary>
+    /// Demonstrates usage of JsonSqid attribute usage on arrays
+    /// </summary>
+    [JsonSqid<WeatherForecast>]
+    public int[] Ids { get; set; } = null!;
+
+    /// <summary>Use this property to compare with Open API JSON output of <see cref="Id"/></summary>
+    public string IdReference { get; set; } = null!;
+
+    /// <summary>Use this property to compare with Open API JSON output of <see cref="Ids"/></summary>
+    public string[] IdsReference { get; set; } = null!;
 
     public DateOnly Date { get; set; }
 
