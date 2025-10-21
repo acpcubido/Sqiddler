@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
     - name: Pack
-      run: dotnet pack -c Release --no-build -o packages
+      run: dotnet pack -c Release --no-build -o packages /p:Version=${{ github.event.release.tag_name }}
 
     # https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing
     - name: NuGet login
