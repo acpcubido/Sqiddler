@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace Sqiddler.AspNetCore;
 
@@ -29,6 +30,7 @@ public readonly struct SqidParam<TSeed, TValue>(TValue value)
 [DebuggerDisplay("{Value,nq}")]
 public readonly struct SqidParam<TSeed>(int value)
 {
+    [JsonIgnore]
     public readonly int Value => value;
 
     public static implicit operator int(SqidParam<TSeed> value) => value.Value;
