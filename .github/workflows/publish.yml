@@ -23,10 +23,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build -c Release --no-restore
-    - name: Set version
-      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     - name: Pack
-      run: dotnet pack -c Release --no-build -o packages /p:Version=${VERSION}
+      run: dotnet pack -c Release --no-build -o packages /p:Version=${{ github.event.release.tag_name }}
 
     # https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing
     - name: NuGet login
