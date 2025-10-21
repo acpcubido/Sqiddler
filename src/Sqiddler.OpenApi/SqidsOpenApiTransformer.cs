@@ -36,6 +36,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
                 // For array properties, set the items to string type
                 if (schema.Items != null)
                 {
+                    // { "type": "integer", "format": "int32" } => { "type": "string" }
                     schema.Items.Type = "string";
                     schema.Items.Format = null;
                     schema.Items.Properties?.Clear();
@@ -43,7 +44,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             }
             else
             {
-                // For non-array properties, set the schema to string type
+                    // { "type": "integer", "format": "int32" } => { "type": "string" }
                 schema.Type = "string";
                 schema.Format = null;
             }
