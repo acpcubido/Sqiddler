@@ -32,19 +32,11 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             var propertyType = context.JsonPropertyInfo.PropertyType;
             if (propertyType.IsArray)
             {
-                // For array properties, set the items to string type
-                if (schema.Items != null)
-                {
-                    // { "type": "integer", "format": "int32" } => { "type": "string" }
-                    schema.Items.Type = "string";
-                    schema.Items.Format = null;
-                }
-                else
-                {
-                    // { "type": "integer", "format": "int32" } => { "type": "string" }
-                    schema.Type = "string";
-                    schema.Format = null;
-                }
+                TryChangeToString(schema.Items);
+            }
+            else
+            {
+                TryChangeToString(schema);
             }
         }
         return Task.CompletedTask;
@@ -61,30 +53,19 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             {
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
+                    var schema = operation.Parameters[i].Schema;
                     var parameterType = context.Description.ParameterDescriptions[i].Type;
-
                     if (parameterType.IsArray)
                     {
-                        // For array parameters, replace with a string array schema
-                        operation.Parameters[i].Schema = new OpenApiSchema
-                        {
-                            Type = "array",
-                            Items = new OpenApiSchema
-                            {
-                                Type = "string"
-                            }
-                        };
+                        TryChangeToString(schema.Items);
                     }
                     else
                     {
-                        // For non-array parameters, replace with a string schema
-                        operation.Parameters[i].Schema = new OpenApiSchema
-                        {
-                            Type = "string"
-                        };
+                        TryChangeToString(schema);
                     }
                 }
 
+                // Check for unsupported usage of JsonSqidAttribute on properties within AsParameters types
                 //    var sqidProperties = context.MethodInfo.GetParameters()
                 //        .Where(p => p.GetCustomAttribute<AsParametersAttribute>() != null)
                 //        .SelectMany(p => p.ParameterType.GetProperties())
@@ -99,6 +80,22 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
 
         }
         return Task.CompletedTask;
+    }
+
+    private static bool TryChangeToString(OpenApiSchema? schema)
+    {
+        if (schema == null)
+        {
+            return false;
+        }
+
+        // { "type": "integer", "format": "int32" } => { "type": "string" }
+        schema.Type = "string";
+        schema.Format = null;
+
+        //schema.Properties?.Clear();
+
+        return true;
     }
 
     private static bool IsSqid(PropertyInfo propertyInfo)
