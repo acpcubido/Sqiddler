@@ -29,8 +29,15 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
     {
         if (context.JsonPropertyInfo != null && IsSqid(context.JsonPropertyInfo))
         {
-            schema.Format = "string";
-            // TODO: arrays
+            var propertyType = context.JsonPropertyInfo.PropertyType;
+            if (propertyType.IsArray)
+            {
+                TryChangeToString(schema.Items);
+            }
+            else
+            {
+                TryChangeToString(schema);
+            }
         }
         return Task.CompletedTask;
     }
@@ -46,11 +53,19 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             {
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
-                    var schema = operation.Parameters[i].Schema!;
-                    schema.Format = "string";
-                    //schema.Items = null;
+                    var schema = operation.Parameters[i].Schema;
+                    var parameterType = context.Description.ParameterDescriptions[i].Type;
+                    if (parameterType.IsArray)
+                    {
+                        TryChangeToString(schema.Items);
+                    }
+                    else
+                    {
+                        TryChangeToString(schema);
+                    }
                 }
 
+                // Check for unsupported usage of JsonSqidAttribute on properties within AsParameters types
                 //    var sqidProperties = context.MethodInfo.GetParameters()
                 //        .Where(p => p.GetCustomAttribute<AsParametersAttribute>() != null)
                 //        .SelectMany(p => p.ParameterType.GetProperties())
@@ -65,6 +80,22 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
 
         }
         return Task.CompletedTask;
+    }
+
+    private static bool TryChangeToString(OpenApiSchema? schema)
+    {
+        if (schema == null)
+        {
+            return false;
+        }
+
+        // { "type": "integer", "format": "int32" } => { "type": "string" }
+        schema.Type = "string";
+        schema.Format = null;
+
+        //schema.Properties?.Clear();
+
+        return true;
     }
 
     private static bool IsSqid(PropertyInfo propertyInfo)
