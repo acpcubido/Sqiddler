@@ -38,6 +38,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
                 {
                     schema.Items.Type = "string";
                     schema.Items.Format = null;
+                    schema.Items.Properties?.Clear();
                 }
             }
             else
@@ -62,22 +63,26 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
                     var parameterType = context.Description.ParameterDescriptions[i].Type;
-                    var schema = operation.Parameters[i].Schema!;
                     
                     if (parameterType.IsArray)
                     {
-                        // For array parameters, set the items to string type
-                        if (schema.Items != null)
+                        // For array parameters, replace with a string array schema
+                        operation.Parameters[i].Schema = new OpenApiSchema
                         {
-                            schema.Items.Type = "string";
-                            schema.Items.Format = null;
-                        }
+                            Type = "array",
+                            Items = new OpenApiSchema
+                            {
+                                Type = "string"
+                            }
+                        };
                     }
                     else
                     {
-                        // For non-array parameters, set the schema to string type
-                        schema.Type = "string";
-                        schema.Format = null;
+                        // For non-array parameters, replace with a string schema
+                        operation.Parameters[i].Schema = new OpenApiSchema
+                        {
+                            Type = "string"
+                        };
                     }
                 }
 
