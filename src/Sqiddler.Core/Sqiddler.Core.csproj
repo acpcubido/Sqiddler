@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
 	
 	<!-- NuGet -->
 	<PackageId>Sqiddler.Core</PackageId>
-	<Authors>mhartmair-cubido</Authors>
+	<Authors>mhartmair-cubido;jgarn-cubido</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 	<Description>Use Sqids in ASP.NET Core with Attributes</Description>
 	<PackageTags>Sqids</PackageTags>
