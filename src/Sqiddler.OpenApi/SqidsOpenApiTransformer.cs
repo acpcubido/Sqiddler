@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Sqiddler.AspNetCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -16,7 +16,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             var sqidSchemas = document.Components.Schemas.Where(s => s.Key.StartsWith("SqidParamOf")).Select(s => s.Key).ToArray();
             foreach (var key in sqidSchemas)
             {
-                //document.Components.Schemas.Remove(key);
+                document.Components.Schemas.Remove(key);
             }
         }
         return Task.CompletedTask;
@@ -29,15 +29,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
     {
         if (context.JsonPropertyInfo != null && IsSqid(context.JsonPropertyInfo))
         {
-            var propertyType = context.JsonPropertyInfo.PropertyType;
-            if (propertyType.IsArray)
-            {
-                TryChangeToString(schema.Items);
-            }
-            else
-            {
-                TryChangeToString(schema);
-            }
+            TryChangeToString(schema);
         }
         return Task.CompletedTask;
     }
@@ -53,16 +45,7 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
             {
                 if (IsSqidParam(context.Description.ParameterDescriptions[i].Type))
                 {
-                    var schema = operation.Parameters[i].Schema;
-                    var parameterType = context.Description.ParameterDescriptions[i].Type;
-                    if (parameterType.IsArray)
-                    {
-                        TryChangeToString(schema.Items);
-                    }
-                    else
-                    {
-                        TryChangeToString(schema);
-                    }
+                    TryChangeToString(operation.Parameters[i].Schema);
                 }
 
                 // Check for unsupported usage of JsonSqidAttribute on properties within AsParameters types
@@ -82,20 +65,54 @@ public class SqidsOpenApiTransformer : IOpenApiSchemaTransformer, IOpenApiOperat
         return Task.CompletedTask;
     }
 
-    private static bool TryChangeToString(OpenApiSchema? schema)
+    private static bool TryChangeToString(IOpenApiSchema? schema)
+    {
+        return TryChangeToString(ref schema);
+    }
+
+    private static bool TryChangeToString(ref IOpenApiSchema? schema)
     {
         if (schema == null)
         {
             return false;
         }
 
-        // { "type": "integer", "format": "int32" } => { "type": "string" }
-        schema.Type = "string";
-        schema.Format = null;
+        if (schema is OpenApiSchemaReference refSchema)
+        {
+            if (refSchema.Type == JsonSchemaType.Array)
+            {
+                return TryChangeToString(refSchema.Items);
+            }
+            else
+            {
+                schema = new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                };
+                return true;
+            }
+        }
 
-        //schema.Properties?.Clear();
+        if (schema is OpenApiSchema openApiSchema)
+        {
+            if (openApiSchema.Type == JsonSchemaType.Array)
+            {
+                var items = openApiSchema.Items;
+                var result = TryChangeToString(ref items);
+                openApiSchema.Items = items;
+                return result;
+            }
 
-        return true;
+            // { "type": "integer", "format": "int32" } => { "type": "string" }
+            openApiSchema.Type = JsonSchemaType.String;
+            openApiSchema.Format = null;
+
+            //schema.Properties?.Clear();
+            return true;
+        }
+
+
+        return false;
     }
 
     private static bool IsSqid(PropertyInfo propertyInfo)

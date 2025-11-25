@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "GettingStarted | v1",
     "version": "1.0.0"
@@ -112,37 +112,52 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Demonstrates usage of JsonSqid attribute usage on plain integer properties"
           },
           "ids": {
             "type": "array",
             "items": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
               "type": "string"
-            }
+            },
+            "description": "Demonstrates usage of JsonSqid attribute usage on arrays"
           },
           "idReference": {
-            "type": "string"
+            "type": "string",
+            "description": "Use this property to compare with Open API JSON output of int WeatherForecast.Id"
           },
           "idsReference": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Use this property to compare with Open API JSON output of int[] WeatherForecast.Ids"
           },
           "date": {
             "type": "string",
             "format": "date"
           },
           "temperatureC": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "summary": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "temperatureF": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           }
         }

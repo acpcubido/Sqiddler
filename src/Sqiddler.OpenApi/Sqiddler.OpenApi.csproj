@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
 	
 	<!-- NuGet -->
 	<PackageId>Sqiddler.OpenApi</PackageId>
-	<Authors>mhartmair-cubido</Authors>
+	<Authors>mhartmair-cubido;jgarn-cubido</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 	<Description>Use Sqids in ASP.NET Core with Attributes</Description>
 	<PackageTags>Sqids</PackageTags>
@@ -13,7 +13,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Sqids" Version="3.1.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
